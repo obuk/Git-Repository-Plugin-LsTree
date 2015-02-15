@@ -30,8 +30,9 @@ sub _ls_tree {
 
 sub new {
   my ($class, $git) = splice(@_, 0, 2);
+  my $enc = shift if @_ && $_[0] =~ /^:/;
   my $ls_tree = $git->command(qw/ls-tree/, @_)->stdout;
-  binmode($ls_tree, ":encoding(UTF-8)");
+  binmode $ls_tree, $enc if $enc;
   my @ls_tree;
   while (<$ls_tree>) {
     chop;
